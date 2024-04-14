@@ -1,5 +1,8 @@
 package com.silva.stefano.jwtvalidador.controller;
 
+import com.silva.stefano.jwtvalidador.exceptions.BaseException;
+import com.silva.stefano.jwtvalidador.validations.JWTValidation;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,18 +15,20 @@ public class ValidadorController {
     @GetMapping
     public ResponseEntity<String > Get(String jwt)
     {
+        HttpHeaders responseHeaders = new HttpHeaders();
         try
         {
-            //return Ok(JWTValidation.Valid(jwt));
-            return ResponseEntity.ok("verdadeiro");
+            return ResponseEntity.ok(JWTValidation.Valid(jwt));
         }
-        catch (Exception except)
+        catch (BaseException except)
         {
-            /*Response.Headers.Append("Exception-Message", except.Message);
-            Response.Headers.Append("Exception-Type", except.TipoExcecao.ToString());
-            */
+            responseHeaders.set("Exception-Message", except.getMessage());
+            responseHeaders.set("Exception-Type", except.getTipoExcecao().name());
         }
 
-        return  ResponseEntity.badRequest().body("saldo");
+        return  ResponseEntity
+                .badRequest()
+                .headers(responseHeaders)
+                .body("falso");
     }
 }
