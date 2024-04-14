@@ -18,6 +18,7 @@ public class ValidadorController {
         HttpHeaders responseHeaders = new HttpHeaders();
         try
         {
+            //TODO: Adicionar Swagger, README e DockerFile
             return ResponseEntity.ok(JWTValidation.Valid(jwt));
         }
         catch (BaseException except)

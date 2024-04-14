@@ -46,24 +46,20 @@ Construa uma aplicação que exponha uma api web que recebe por parâmetros um J
 
     public static JWTTokenModel ConvertToken(DecodedJWT jwtToken)
     {
-        String name = "";
-        String role = "";
-        String seed = "";
+        String name = jwtToken.getClaim("Name").asString();
+        String role = jwtToken.getClaim("Role").asString();
+        String seed = jwtToken.getClaim("Seed").asString();
 
-        //TODO: Verificar se causa excesão quando não encontrado
-        try{
-            name = jwtToken.getClaim("Name").asString();
-            role = jwtToken.getClaim("Role").asString();
-            seed = jwtToken.getClaim("Seed").asString();
-        }catch (Exception ex){
-
-        }
-        return new JWTTokenModel(name, role, seed);
+        return new JWTTokenModel(
+                name == null ? "": name,
+                role == null ? "": role,
+                seed == null ? "": seed
+        );
     }
 
     private static void VerificarName(JWTTokenModel jwtTokenModel) throws BaseException {
 
-        if (jwtTokenModel.getName().chars().anyMatch(x -> Character.isDigit(x)))
+        if (jwtTokenModel.getName().chars().anyMatch(Character::isDigit))
         {
             throw new InvalidDomainException("The Name claim cannot have a number character");
         }
@@ -75,7 +71,7 @@ Construa uma aplicação que exponha uma api web que recebe por parâmetros um J
 
     private static void VerificarClaim(DecodedJWT jwtToken) throws BaseException {
         var isJWTValido = (jwtToken.getClaims().size() == 3
-                && Stream.of(ClaimsValidas).allMatch(cl -> !jwtToken.getClaim(cl).isNull()));
+                && Stream.of(ClaimsValidas).noneMatch(cl -> jwtToken.getClaim(cl).isNull()));
 
         if (!isJWTValido)
         {
@@ -97,17 +93,16 @@ Construa uma aplicação que exponha uma api web que recebe por parâmetros um J
             seed = Integer.parseInt(jwtTokenModel.getSeed());
             isNumero= true;
         }catch (Exception ex){
-
         }
-        var isPrimo = isNumero && VerificaNumeroPrimo(seed);
 
+        var isPrimo = isNumero && VerificaNumeroPrimo(seed);
         if (!isPrimo )
         {
             throw new InvalidDomainException("The Seed claim must be a prime number");
         }
     }
 
-    private static boolean VerificaNumeroPrimo(int numero) {
+    public static boolean VerificaNumeroPrimo(int numero) {
         if (numero <= 1) {
             return false;
         }
