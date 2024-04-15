@@ -95,14 +95,14 @@ Construa uma aplicação que exponha uma api web que recebe por parâmetros um J
         }catch (Exception ex){
         }
 
-        var isPrimo = isNumero && VerificaNumeroPrimo(seed);
+        var isPrimo = isNumero && EhNumeroPrimo(seed);
         if (!isPrimo )
         {
             throw new InvalidDomainException("The Seed claim must be a prime number");
         }
     }
 
-    public static boolean VerificaNumeroPrimo(int numero) {
+    public static boolean EhNumeroPrimo(int numero) {
         if (numero <= 1) {
             return false;
         }

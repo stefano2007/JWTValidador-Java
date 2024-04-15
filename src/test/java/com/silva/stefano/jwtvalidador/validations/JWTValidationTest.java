@@ -13,11 +13,6 @@ import java.util.Arrays;
 @SpringBootTest
 public class JWTValidationTest {
     private final String MensagemErroTokenInvalido = "Invalid JWT";
-    private final String MensagemErroNomeContemNumero = "The Name claim cannot have a number character";
-    private final String MensagemErroEstruturaInvalida = "Invalid token structure should contain only 3 claims(Name, Role and Seed)";
-    private final String MensagemErroRoleInvalida = "The Role claim must contain only 1 of the three values (Admin, Member, and External)";
-    private final String MensagemErroSeedNumeroNaoPrimo = "The Seed claim must be a prime number";
-    private final String MensagemErroNameMaior256 = "The maximum length of the Name claim is 256 characters";
 
     @Test
     void Verificar_Valid() throws BaseException{
@@ -47,15 +42,17 @@ public class JWTValidationTest {
         );
 
         //Assert
+        String mensagemErroEstruturaInvalida = "Invalid token structure should contain only 3 claims(Name, Role and Seed)";
+
         Assertions.assertEquals("verdadeiro", result);
         Assertions.assertEquals(MensagemErroTokenInvalido, exception2.getMessage());
-        Assertions.assertEquals(MensagemErroNomeContemNumero, exception3.getMessage());
-        Assertions.assertEquals(MensagemErroEstruturaInvalida, exception4.getMessage());
+        Assertions.assertEquals("The Name claim cannot have a number character", exception3.getMessage());
+        Assertions.assertEquals(mensagemErroEstruturaInvalida, exception4.getMessage());
 
-        Assertions.assertEquals(MensagemErroEstruturaInvalida, exceptionJWTEstruturaInvalida.getMessage());
-        Assertions.assertEquals(MensagemErroRoleInvalida, exceptionRoleInvalida.getMessage());
-        Assertions.assertEquals(MensagemErroSeedNumeroNaoPrimo, exceptionSeedNaoPrimo.getMessage());
-        Assertions.assertEquals(MensagemErroNameMaior256, exceptionNameMaior256.getMessage());
+        Assertions.assertEquals(mensagemErroEstruturaInvalida, exceptionJWTEstruturaInvalida.getMessage());
+        Assertions.assertEquals("The Role claim must contain only 1 of the three values (Admin, Member, and External)", exceptionRoleInvalida.getMessage());
+        Assertions.assertEquals("The Seed claim must be a prime number", exceptionSeedNaoPrimo.getMessage());
+        Assertions.assertEquals("The maximum length of the Name claim is 256 characters", exceptionNameMaior256.getMessage());
     }
 
     @Test
@@ -101,14 +98,14 @@ public class JWTValidationTest {
     }
 
     @Test
-    void Verificar_VerificaNumeroPrimo(){
+    void Test_Metodo_EhNumeroPrimo(){
         //Act
-        int[] numeroPrimos = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97 };
-        int[] numeroNaoPrimos = { 1, 4, 6 ,8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 36 };
+        int[] numeroPrimos = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+        int[] numeroNaoPrimos = {1, 4, 6 ,8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 36};
 
         //Arrange
-        var todosPrimos = Arrays.stream(numeroPrimos).allMatch(JWTValidation::VerificaNumeroPrimo);
-        var todosNaoPrimos = Arrays.stream(numeroNaoPrimos).noneMatch(JWTValidation::VerificaNumeroPrimo);
+        var todosPrimos = Arrays.stream(numeroPrimos).allMatch(JWTValidation::EhNumeroPrimo);
+        var todosNaoPrimos = Arrays.stream(numeroNaoPrimos).noneMatch(JWTValidation::EhNumeroPrimo);
 
         //Assert
         Assertions.assertTrue(todosPrimos);
