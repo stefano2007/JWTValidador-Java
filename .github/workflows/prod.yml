@@ -17,4 +17,8 @@ jobs:
       - name: Build project
         run: mvn clean package
       - name: Build docker image
-        run: docker build -t stefano2007/jwtvalidador .
+        run: docker build -f Dockerfile.github -t stefano2007/jwtvalidador .
+      - name: Login Docker Hub
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: Push image docker
+        run: docker push stefano2007/jwtvalidador
