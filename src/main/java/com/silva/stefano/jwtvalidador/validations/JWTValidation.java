@@ -11,32 +11,23 @@ import com.silva.stefano.jwtvalidador.model.JWTTokenModel;
 import java.util.stream.Stream;
 
 public class JWTValidation {
-/*
-Construa uma aplicação que exponha uma api web que recebe por parâmetros um JWT (string) e verifica se é válida, conforme regras abaixo:
-• Deve ser um JWT válido
-• Deve conter apenas 3 claims(Name, Role e Seed)
-• A claim Name não pode ter carácter de números
-• A claim Role deve conter apenas 1 dos três valores (Admin, Member e External)
-• A claim Seed deve ser um número primo.
-• O tamanho máximo da claim Name é de 256 caracteres.
-*/
-    private static final String[] ClaimsValidas = { "Name", "Role", "Seed" };
-    private static final String[] RolesValidas = { "Admin", "Member", "External" };
+    private static final String[] ValidClaims = { "Name", "Role", "Seed" };
+    private static final String[] ValidRoles = { "Admin", "Member", "External" };
 
-    public static String Valid(String jwt) throws BaseException {
-        var jwtToken = ValidateToken(jwt);
-        VerificarClaim(jwtToken);
+    public static boolean Valid(String jwt) throws BaseException {
+        var jwtToken = TryConvertToken(jwt);
+        VerifyClaim(jwtToken);
 
-        var jwtTokenModel = ConvertToken(jwtToken);
+        var jwtTokenModel = TokenToModel(jwtToken);
 
-        VerificarName(jwtTokenModel);
-        VerificarRole(jwtTokenModel);
-        VerificarNumero(jwtTokenModel);
+        VerifyName(jwtTokenModel);
+        VerifyRole(jwtTokenModel);
+        VerifySeed(jwtTokenModel);
 
-        return "verdadeiro";
+        return true;
     }
 
-    public static DecodedJWT  ValidateToken(String token) throws BaseException {
+    public static DecodedJWT TryConvertToken(String token) throws BaseException {
         try {
             return JWT.decode(token);
         } catch (Exception e) {
@@ -44,7 +35,7 @@ Construa uma aplicação que exponha uma api web que recebe por parâmetros um J
         }
     }
 
-    public static JWTTokenModel ConvertToken(DecodedJWT jwtToken)
+    public static JWTTokenModel TokenToModel(DecodedJWT jwtToken)
     {
         String name = jwtToken.getClaim("Name").asString();
         String role = jwtToken.getClaim("Role").asString();
@@ -57,57 +48,56 @@ Construa uma aplicação que exponha uma api web que recebe por parâmetros um J
         );
     }
 
-    private static void VerificarName(JWTTokenModel jwtTokenModel) throws BaseException {
+    private static void VerifyName(JWTTokenModel jwtTokenModel) throws BaseException {
 
         if (jwtTokenModel.getName().chars().anyMatch(Character::isDigit))
         {
-            throw new InvalidDomainException("The Name claim cannot have a number character");
+            throw new InvalidDomainException("The Name cannot have a number character");
         }
         if (jwtTokenModel.getName().length() > 256)
         {
-            throw new InvalidDomainException("The maximum length of the Name claim is 256 characters");
+            throw new InvalidDomainException("The maximum length of the Name is 256 characters");
         }
     }
 
-    private static void VerificarClaim(DecodedJWT jwtToken) throws BaseException {
-        var isJWTValido = (jwtToken.getClaims().size() == 3
-                && Stream.of(ClaimsValidas).noneMatch(cl -> jwtToken.getClaim(cl).isNull()));
+    private static void VerifyClaim(DecodedJWT jwtToken) throws BaseException {
+        var isValidJWT = (jwtToken.getClaims().size() == 3
+                && Stream.of(ValidClaims).noneMatch(cl -> jwtToken.getClaim(cl).isNull()));
 
-        if (!isJWTValido)
+        if (!isValidJWT)
         {
             throw new InvalidStructureException("Invalid token structure should contain only 3 claims(Name, Role and Seed)");
         }
     }
 
-    private static void VerificarRole(JWTTokenModel jwtTokenModel) throws BaseException {
-        if (Stream.of(RolesValidas).noneMatch(r -> jwtTokenModel.getRole().equals(r)))
+    private static void VerifyRole(JWTTokenModel jwtTokenModel) throws BaseException {
+        if (Stream.of(ValidRoles).noneMatch(r -> jwtTokenModel.getRole().equals(r)))
         {
-            throw new InvalidDomainException("The Role claim must contain only 1 of the three values (Admin, Member, and External)");
+            throw new InvalidDomainException("The Role claim must contain only 1 of the three values (Admin, Member and External)");
         }
     }
 
-    private static void VerificarNumero(JWTTokenModel jwtTokenModel) throws BaseException {
-        boolean isNumero = false;
-        int seed = -1;
+    private static void VerifySeed(JWTTokenModel jwtTokenModel) throws BaseException {
+
+        int seed;
         try{
             seed = Integer.parseInt(jwtTokenModel.getSeed());
-            isNumero= true;
         }catch (Exception ex){
+            throw new InvalidDomainException("The Seed claim must be a prime number");
         }
 
-        var isPrimo = isNumero && EhNumeroPrimo(seed);
-        if (!isPrimo )
+        if (!IsPrimeNumber(seed))
         {
             throw new InvalidDomainException("The Seed claim must be a prime number");
         }
     }
 
-    public static boolean EhNumeroPrimo(int numero) {
-        if (numero <= 1) {
+    public static boolean IsPrimeNumber(int number) {
+        if (number <= 1) {
             return false;
         }
-        for (int divisor = 2; divisor <= Math.sqrt(numero); divisor++) {
-            if (numero % divisor == 0) {
+        for (int divisor = 2; divisor <= Math.sqrt(number); divisor++) {
+            if (number % divisor == 0) {
                 return false;
             }
         }
