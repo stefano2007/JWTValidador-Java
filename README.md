@@ -4,8 +4,6 @@
 - [Resumo](#resumo)
 - [Ferramentas](#ferramentas)
 - [Instalação](#instalação)
-- [Compilar Aplicativo](#compilar-aplicativo)
-- [Testes Unitários](#testes-unitários)
 - [Overview da API](#overview-da-api)
 - [Docker](#docker)
 - [Agradecimentos](#agradecimentos)
@@ -45,7 +43,7 @@ Neste projeto, foi desenvolvidos e abordados os seguintes tópicos:
 ### Pre Requesitos
 
 - [Java JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-- [Maven](https://maven.apache.org/)
+- [Maven](https://maven.apache.org/download.cgi)
 
 ### Baixando e executando o projeto
 
@@ -58,30 +56,42 @@ git clone https://github.com/stefano2007/JWTValidador-Java.git
 Ir para pasta do projeto
 
 ```
-cd jwtvalidador
+cd JWTValidador-Java
 ```
 
 Complilar o projeto
 
 ```
-java ...
+mvn clean package
 ```
 
 Rodar o projeto
 
 ```
-java ...
+java -jar target/jwtvalidador-1.0.0.jar
 ```
 
 Obs. Opção também de roda no docker [adiante](#docker).
 
-## Testes Unitários
+### Testes Unitários
+
+[JUnit](https://junit.org/) 5.7.0
+
+[Mockito](https://site.mockito.org/) 5.10.2
+
+Execute o testes unitários usando o comando a seguir:
+
+```
+mvn test
+```
+
+![Testes unitários](readme/RunTest-2024-04-15.png)
 
 ## Overview da API
 
 ### Metodo Validador
 
-Metodo: GET /Validador 
+Metodo: GET /api/Validador 
 
 Input: jwt (query)
 
@@ -89,6 +99,9 @@ Retorno Sucesso: Status 200(OK), Body: "verdadeiro"
 
 Retorno Erro: Status 400(BAD_REQUEST), Body: "falso" e Response Headers com "Exception-Message" e "Exception-Type" detalhando a erro.
 
+Os campos adicionar no Headers da resposta foi pensado para ajudar quem consome a API sem modificar a estrutura de retorno.
+
+![Imagem Swagger](readme/swagger-2024-04-15.png)
 
 ### Casos de uso
 
@@ -182,8 +195,8 @@ Justificativa: Abrindo o JWT, a Claim Name possui caracter de números
 
 ### Collection Insomnia
 
-- Importe a coleção no Insomnia [link arquivo json Insomnia](readme/Insomnia_2024-04-14.json)
-  ![Coleções Insomnia](readme/Insomnia_2024-04-14.png)
+- Importe a coleção no Insomnia [link arquivo json Insomnia](readme/Insomnia_2024-04-16.json)
+  ![Coleções Insomnia](readme/Insomnia_2024-04-16.png)
 
 - Certifique que a variavel urlBase esta apontando para a API em execução
   ![Insomnia variaveis](readme/Insomnia_urlBase.png)
@@ -191,7 +204,6 @@ Justificativa: Abrindo o JWT, a Claim Name possui caracter de números
 ### Demostrativo Insomnia (Importando collection, Verificando variaveis e teste de API)
 
 ![Demostrativo Insomnia](readme/Insomnia-2024-04-14-17-58-46.gif)
-
 
 ## Docker
 
@@ -215,4 +227,4 @@ Obs. estou usando o WSL no Windows porém e igual para o Docker CLI, segue [link
 
 ## Agradecimentos
 
-Obrigado pela oportunidade e te chegado aqui :)
+Obrigado pela oportunidade e te chegado até aqui :)
