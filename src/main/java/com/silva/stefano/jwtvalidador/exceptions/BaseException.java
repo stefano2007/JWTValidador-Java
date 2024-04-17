@@ -1,15 +1,15 @@
 package com.silva.stefano.jwtvalidador.exceptions;
 
-import  com.silva.stefano.jwtvalidador.enumerators.TipoExcecao;
+import com.silva.stefano.jwtvalidador.enumerators.ExceptionType;
 
 public abstract class BaseException extends Exception {
-    private final TipoExcecao TipoExcecao;
+    private final ExceptionType ExceptionType;
 
-    protected BaseException(String error, TipoExcecao tipoExcecao) {
+    protected BaseException(String error, ExceptionType exceptionType) {
         super(error);
-        TipoExcecao = tipoExcecao;
+        ExceptionType = exceptionType;
     }
-    public TipoExcecao getTipoExcecao() {
-        return TipoExcecao;
+    public ExceptionType getExceptionType() {
+        return ExceptionType;
     }
 }

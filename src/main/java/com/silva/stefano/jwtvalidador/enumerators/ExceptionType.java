@@ -1,6 +1,6 @@
 package com.silva.stefano.jwtvalidador.enumerators;
 
-public enum TipoExcecao {
+public enum ExceptionType {
     INVALID_JWT,
     INVALID_DOMAIN,
     INVALID_STRUCTURE

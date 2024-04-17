@@ -1,9 +1,9 @@
 package com.silva.stefano.jwtvalidador.exceptions;
 
-import com.silva.stefano.jwtvalidador.enumerators.TipoExcecao;
+import com.silva.stefano.jwtvalidador.enumerators.ExceptionType;
 
 public class InvalidJWTException extends BaseException{
     public InvalidJWTException(String error){
-        super(error, TipoExcecao.INVALID_JWT);
+        super(error, ExceptionType.INVALID_JWT);
     }
 }
