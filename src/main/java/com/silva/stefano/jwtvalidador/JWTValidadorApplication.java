@@ -10,15 +10,4 @@ public class JWTValidadorApplication {
 		SpringApplication.run(JWTValidadorApplication.class, args);
 	}
 
-	/*
-	TODO: Documentar Swagger
-	@Bean
-	private OpenAPI openInfo() {
-		Info info = new Info()
-				.description("Validar estrutura JWT com regras definidas")
-				.title("JWT Validador")
-				.version("v1");
-
-		return new OpenAPI().info(info);
-	}*/
 }
