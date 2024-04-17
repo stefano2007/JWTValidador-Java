@@ -4,7 +4,6 @@ import com.silva.stefano.jwtvalidador.exceptions.BaseException;
 import com.silva.stefano.jwtvalidador.validations.JWTValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpHeaders;

@@ -28,7 +28,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve falhar ao validar o Caso 2 - Token invalido")
-    void ShouldReturnExceptionCase2() throws BaseException{
+    void ShouldReturnExceptionCase2(){
         //Act e Arrange
         var exception = Assertions.assertThrows(InvalidJWTException.class,
                 () -> JWTValidation.Valid(JWTFixture.JWT_INVALIDO_CASO2)
@@ -40,7 +40,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve falhar ao validar o Caso 3 - Nome invalido")
-    void ShouldReturnExceptionCase3() throws BaseException{
+    void ShouldReturnExceptionCase3(){
         //Act e Arrange
         var exception = Assertions.assertThrows(InvalidDomainException.class,
                 () -> JWTValidation.Valid(JWTFixture.JWT_INVALIDO_CASO3)
@@ -52,7 +52,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve falhar ao validar o Caso 4 - Nome invalido")
-    void ShouldReturnExceptionCase4() throws BaseException{
+    void ShouldReturnExceptionCase4(){
         //Act e Arrange
         var exception = Assertions.assertThrows(InvalidStructureException.class,
                 () -> JWTValidation.Valid(JWTFixture.JWT_INVALIDO_CASO4)
@@ -65,7 +65,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve falhar ao validar Token com Estrutura invalida")
-    void ShouldReturnExceptionInvalidStructure() throws BaseException{
+    void ShouldReturnExceptionInvalidStructure(){
         //Act e Arrange
         var exceptionJWTInvalidStructure = Assertions.assertThrows(InvalidStructureException.class,
                 () -> JWTValidation.Valid(JWTFixture.JWT_INVALIDO_ESTRUTURA_JWT)
@@ -77,7 +77,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve falhar ao validar Token com Role diferente de (Admin, Member e External)")
-    void ShouldReturnExceptionInvalidRole() throws BaseException{
+    void ShouldReturnExceptionInvalidRole(){
         //Act e Arrange
         var exceptionInvalidRole = Assertions.assertThrows(InvalidDomainException.class,
                 () -> JWTValidation.Valid(JWTFixture.JWT_INVALIDO_ROLE_INVALIDA)
@@ -92,7 +92,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve falhar ao validar Token com Seed com numero não primo")
-    void ShouldReturnExceptionInvalidSeed() throws BaseException{
+    void ShouldReturnExceptionInvalidSeed(){
         //Act e Arrange
         var exceptionSeedNaoPrimo = Assertions.assertThrows(InvalidDomainException.class,
                 () -> JWTValidation.Valid(JWTFixture.JWT_INVALIDO_SEED_NAO_PRIMO)
@@ -104,7 +104,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve falhar ao validar Token Name com mais de 256 caracteres")
-    void ShouldReturnExceptionInvalidName() throws BaseException{
+    void ShouldReturnExceptionInvalidName(){
         //Act e Arrange
         var exceptionNameMaior256 = Assertions.assertThrows(InvalidDomainException.class,
                 () -> JWTValidation.Valid(JWTFixture.JWT_INVALIDO_NAME_MAIOR_256)
@@ -126,7 +126,7 @@ public class JWTValidationTest {
 
     @Test
     @DisplayName("Deve lançar exceção ao converte o jwt Caso 2 inválido")
-    void ShouldTryTokenToModelWithFailCase2() throws BaseException {
+    void ShouldTryTokenToModelWithFailCase2(){
         //Act e Arrange
         var exceptionValidateToken = Assertions.assertThrows(InvalidJWTException.class, () -> JWTValidation.TryConvertToken(JWTFixture.JWT_INVALIDO_CASO2));
 
