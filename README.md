@@ -6,6 +6,7 @@
 - [Instalação](#instalação)
 - [Overview da API](#overview-da-api)
 - [Docker](#docker)
+- [Build e Deploy](#build-e-deploy)
 - [Agradecimentos](#agradecimentos)
 
 ## Resumo
@@ -16,7 +17,7 @@ Criar um API que receba um JWT (string) e verificar se é validos conforme regra
 - O campo Name não pode conter números e possuir até 256 caracteres
 - O campo Role pode conter apenas 1 valor (Admin, Member e External)
 - O campo Seed deve ser um número primo.
-O retorno deve ser "verdadeiro" ou "falso"
+- O retorno deve ser "verdadeiro" ou "falso"
 
 ## Ferramentas
 
@@ -40,7 +41,7 @@ Neste projeto, foi desenvolvidos e abordados os seguintes tópicos:
 
 ## Instalação
 
-### Pre Requesitos
+### Pré Requesitos
 
 - [Java JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [Maven](https://maven.apache.org/download.cgi)
@@ -59,13 +60,13 @@ Ir para pasta do projeto
 cd JWTValidador-Java
 ```
 
-Complilar o projeto
+Compilar o projeto
 
 ```
 mvn clean package
 ```
 
-Rodar o projeto
+Executar o projeto
 
 ```
 java -jar target/jwtvalidador-1.0.0.jar
@@ -89,15 +90,15 @@ mvn test
 
 ## Overview da API
 
-### Metodo Validador
+### Método Validador
 
-Metodo: GET /api/Validador 
+Método: GET /api/Validador 
 
 Input: jwt (query)
 
 Retorno Sucesso: Status 200(OK), Body: "verdadeiro"
 
-Retorno Erro: Status 400(BAD_REQUEST), Body: "falso" e Response Headers com "Exception-Message" e "Exception-Type" detalhando a erro.
+Retorno Erro: Status 400(BAD_REQUEST), Body: "falso" e Headers com "Exception-Message" e "Exception-Type" detalhando a erro.
 
 Os campos adicionar no Headers da resposta foi pensado para ajudar quem consome a API sem modificar a estrutura de retorno.
 
@@ -198,10 +199,10 @@ Justificativa: Abrindo o JWT, a Claim Name possui caracter de números
 - Importe a coleção no Insomnia [link arquivo json Insomnia](readme/Insomnia_2024-04-16.json)
   ![Coleções Insomnia](readme/Insomnia_2024-04-16.png)
 
-- Certifique que a variavel urlBase esta apontando para a API em execução
-  ![Insomnia variaveis](readme/Insomnia_urlBase.png)
+- Certifique que a variável urlBase esta apontando para a API em execução
+  ![Insomnia variáveis](readme/Insomnia_urlBase.png)
 
-### Demostrativo Insomnia (Importando collection, Verificando variaveis e teste de API)
+### Demostrativo Insomnia (Importando collection, Verificando variáveis e teste de API)
 
 ![Demostrativo Insomnia](readme/Insomnia-2024-04-14-17-58-46.gif)
 
@@ -224,6 +225,30 @@ Demostação do rodando no Docker
 ![Rodando API no Docker](readme/RunDocker-2024-04-14.gif)
 
 Obs. estou usando o WSL no Windows porém e igual para o Docker CLI, segue [link para ajudar configurar o Docker no WSL](https://github.com/luamleiverton/wsl2-docker-quickstart-by-fullcycle)
+
+### Roda Imagem baixando do DockerHub
+
+```
+docker run -p 8082:8080 -it stefano2007/jwtvalidador
+```
+
+A imagem será baixada e executada no modo interativo e o sistema irá subir na porta local 8082: Exemplo  http://localhost:8082/swagger-ui/index.html
+
+## Build e Deploy
+
+### Adicionado no projeto uma Github Action
+
+O [script](.github/workflows/prod.yml) faz o build da aplicação incluido testes unitários e registrar a imagem no DockerHub repositorio "stefano2007/jwtvalidador", criado um [Dockerfile](Dockerfile.github) especifico para o github.
+
+![Imagem GithubAction](readme/githubAction-2024-04-17.png)
+
+Repositório [DockerHub](https://hub.docker.com/r/stefano2007/jwtvalidador)
+
+![DockerHub](readme/dockerHub-2024-04-17.png)
+
+### Deploy AWS ECS Fargate
+
+Criado configuração do ECS usando o Fargate para execução do container obtendo a imagem atráves do DockerHub.
 
 ## Agradecimentos
 
